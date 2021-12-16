@@ -45,7 +45,7 @@ light_driver x10_light_driver_create(int32_t id, x10_house_code_t code, int32_t 
 {
     x10_light_driver self = calloc(1, sizeof(x10_light_driver_t));
 
-    self->base.type = X10;
+    // self->base.type = X10;
     self->base.id = id;
     self->house = code;
     self->uint = unit;

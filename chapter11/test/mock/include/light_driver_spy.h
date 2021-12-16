@@ -46,14 +46,12 @@ enum {
 /*---------- variable prototype ----------*/
 /*---------- function prototype ----------*/
 extern light_driver light_driver_spy_create(int32_t id);
-extern void light_driver_spy_destroy(light_driver base);
 extern void light_driver_spy_add_spies_to_controller(void);
 extern void light_driver_spy_reset(void);
-extern void light_driver_spy_on(light_driver base);
-extern void light_driver_spy_off(light_driver base);
 extern int32_t light_driver_spy_get_last_id(void);
 extern int32_t light_driver_spy_get_last_state(void);
 extern int32_t light_driver_spy_get_state(int32_t id);
+extern void light_driver_spy_install_interface(void);
 
 #ifdef __cplusplus
 }

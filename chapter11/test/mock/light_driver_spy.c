@@ -24,11 +24,16 @@
 /*---------- includes ----------*/
 #include "light_driver_spy.h"
 #include "light_controller.h"
+#include "light_driver_private.h"
 #include <stdlib.h>
 
 /*---------- macro ----------*/
 /*---------- variable prototype ----------*/
 /*---------- function prototype ----------*/
+static void light_driver_spy_destroy(light_driver base);
+static void light_driver_spy_on(light_driver base);
+static void light_driver_spy_off(light_driver base);
+
 /*---------- type define ----------*/
 typedef struct light_driver_spy {
     light_driver_t base;
@@ -40,6 +45,11 @@ typedef light_driver_spy_t * light_driver_spy;
 static int32_t last_id;
 static int32_t last_state;
 static int32_t _state[MAX_LIGHTS];
+static light_driver_interface_t spy_if = {
+    light_driver_spy_on,
+    light_driver_spy_off,
+    light_driver_spy_destroy
+};
 
 /*---------- function ----------*/
 light_driver light_driver_spy_create(int32_t id)
@@ -47,12 +57,12 @@ light_driver light_driver_spy_create(int32_t id)
     light_driver_spy self = calloc(1, sizeof(light_driver_spy_t));
 
     self->base.id = id;
-    self->base.type = TEST_LIGHT_DRIVER;
+    self->base.type = "test_driver";
 
     return (light_driver)self;
 }
 
-void light_driver_spy_destroy(light_driver base)
+static void light_driver_spy_destroy(light_driver base)
 {
     free(base);
 }
@@ -86,13 +96,13 @@ static void save(int32_t id, int32_t state)
     last_state = state;
 }
 
-void light_driver_spy_on(light_driver base)
+static void light_driver_spy_on(light_driver base)
 {
     light_driver_spy self = (light_driver_spy)base;
     save(self->base.id, LIGHT_ON);
 }
 
-void light_driver_spy_off(light_driver base)
+static void light_driver_spy_off(light_driver base)
 {
     light_driver_spy self = (light_driver_spy)base;
     save(self->base.id, LIGHT_OFF);
@@ -106,4 +116,9 @@ int32_t light_driver_spy_get_last_id(void)
 int32_t light_driver_spy_get_last_state(void)
 {
     return last_state;
+}
+
+void light_driver_spy_install_interface(void)
+{
+    light_driver_set_interface(&spy_if);
 }

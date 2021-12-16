@@ -1,9 +1,9 @@
 /**
- * @file src/light_controller.c
+ * @file src/light_driver.c
  *
  * Copyright (C) 2021
  *
- * light_controller.c is free software: you can redistribute it and/or modify
+ * light_driver.c is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -22,52 +22,54 @@
  */
 
 /*---------- includes ----------*/
-#include "light_controller.h"
 #include "light_driver.h"
-#include "x10_light_driver.h"
-#include "light_driver_spy.h"
-#include <string.h>
+#include "light_driver_private.h"
 
 /*---------- macro ----------*/
 /*---------- variable prototype ----------*/
 /*---------- function prototype ----------*/
 /*---------- type define ----------*/
 /*---------- variable ----------*/
-static light_driver light_drivers[MAX_LIGHTS];
+static light_driver_interface light_if;
 
 /*---------- function ----------*/
-void light_controller_create(void)
+void light_driver_set_interface(light_driver_interface i)
 {
-    memset(light_drivers, 0, sizeof(light_drivers));
+    light_if = i;
 }
 
-void light_controller_on(int32_t id)
+static inline bool is_valid(light_driver base)
 {
-    light_driver_turn_on(light_drivers[id]);
+    return (light_if && base);
 }
 
-void light_controller_off(int32_t id)
+void light_driver_destroy(light_driver base)
 {
-    light_driver_turn_off(light_drivers[id]);
-}
-
-static void _light_controller_destroy(light_driver base)
-{
-    light_driver_destroy(base);
-}
-
-void light_controller_destroy(void)
-{
-    for(uint8_t i = 0; i < MAX_LIGHTS; ++i) {
-        light_driver drv = light_drivers[i];
-        _light_controller_destroy(drv);
-        light_drivers[i] = NULL;
+    if(is_valid(base)) {
+        light_if->destroy(base);
     }
 }
 
-bool light_controller_add(int32_t id, light_driver drv)
+void light_driver_turn_on(light_driver base)
 {
-    light_drivers[id] = drv;
-    
-    return true;
+    if(is_valid(base)) {
+        light_if->turn_on(base);
+    }
+}
+
+void light_driver_turn_off(light_driver base)
+{
+    if(is_valid(base)) {
+        light_if->turn_off(base);
+    }
+}
+
+char *light_driver_get_type(light_driver base)
+{
+    return base->type;
+}
+
+int light_driver_get_id(light_driver base)
+{
+    return base->id;
 }

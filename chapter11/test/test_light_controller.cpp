@@ -40,6 +40,8 @@ TEST_GROUP(light_controller)
     {
         light_controller_create();
         light_driver_spy_add_spies_to_controller();
+        light_driver_spy_install_interface();
+        light_driver_spy_reset();
     }
 
     void teardown(void)

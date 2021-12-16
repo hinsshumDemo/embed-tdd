@@ -35,22 +35,24 @@ extern "C"
 
 /*---------- macro ----------*/
 /*---------- type define ----------*/
-typedef enum {
-    TEST_LIGHT_DRIVER,
-    X10,
-    ACME_WIRELESS,
-    MEMORY_MAPPED
-} light_driver_type_t;
+// typedef enum {
+//     TEST_LIGHT_DRIVER,
+//     X10,
+//     ACME_WIRELESS,
+//     MEMORY_MAPPED
+// } light_driver_type_t;
 
-typedef struct {
-    light_driver_type_t type;
-    int32_t id;
-} light_driver_t;
-
-typedef light_driver_t * light_driver;
+typedef struct st_light_driver * light_driver;
+typedef struct st_light_driver_interface * light_driver_interface;
 
 /*---------- variable prototype ----------*/
 /*---------- function prototype ----------*/
+extern void light_driver_set_interface(light_driver_interface i);
+extern void light_driver_destroy(light_driver base);
+extern void light_driver_turn_on(light_driver base);
+extern void light_driver_turn_off(light_driver base);
+extern char *light_driver_get_type(light_driver base);
+extern int light_driver_get_id(light_driver base);
 
 #ifdef __cplusplus
 }
