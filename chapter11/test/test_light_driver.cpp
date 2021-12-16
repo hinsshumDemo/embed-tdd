@@ -41,8 +41,9 @@ light_driver_interface_t interface = {
     should_not_be_called
 };
 light_driver_t test_driver = {
-    (char *)"test_driver",
-    13
+    .vtable = NULL,
+    .type = (char *)"test_driver",
+    .id = 13
 };
 
 /*---------- function ----------*/
@@ -67,7 +68,6 @@ TEST_GROUP(light_driver)
 
 TEST(light_driver, NullDriverDoesNotCrash)
 {
-    light_driver_set_interface(&interface);
     light_driver_turn_on(NULL);
     light_driver_turn_off(NULL);
     light_driver_destroy(NULL);
@@ -76,7 +76,6 @@ TEST(light_driver, NullDriverDoesNotCrash)
 
 TEST(light_driver, NullInterfaceDoesNotCrash)
 {
-    light_driver_set_interface(NULL);
     light_driver_turn_on(&test_driver);
     light_driver_turn_off(&test_driver);
     light_driver_destroy(&test_driver);

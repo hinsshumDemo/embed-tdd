@@ -30,37 +30,25 @@
 /*---------- function prototype ----------*/
 /*---------- type define ----------*/
 /*---------- variable ----------*/
-static light_driver_interface light_if;
-
 /*---------- function ----------*/
-void light_driver_set_interface(light_driver_interface i)
-{
-    light_if = i;
-}
-
-static inline bool is_valid(light_driver base)
-{
-    return (light_if && base);
-}
-
 void light_driver_destroy(light_driver base)
 {
-    if(is_valid(base)) {
-        light_if->destroy(base);
+    if(base && base->vtable && base->vtable->destroy) {
+        base->vtable->destroy(base);
     }
 }
 
 void light_driver_turn_on(light_driver base)
 {
-    if(is_valid(base)) {
-        light_if->turn_on(base);
+    if(base && base->vtable && base->vtable->turn_on) {
+        base->vtable->turn_on(base);
     }
 }
 
 void light_driver_turn_off(light_driver base)
 {
-    if(is_valid(base)) {
-        light_if->turn_off(base);
+    if(base && base->vtable && base->vtable->turn_off) {
+        base->vtable->turn_off(base);
     }
 }
 

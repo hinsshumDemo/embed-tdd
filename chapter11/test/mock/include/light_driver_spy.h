@@ -51,7 +51,6 @@ extern void light_driver_spy_reset(void);
 extern int32_t light_driver_spy_get_last_id(void);
 extern int32_t light_driver_spy_get_last_state(void);
 extern int32_t light_driver_spy_get_state(int32_t id);
-extern void light_driver_spy_install_interface(void);
 
 #ifdef __cplusplus
 }

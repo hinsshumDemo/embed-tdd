@@ -56,6 +56,7 @@ light_driver light_driver_spy_create(int32_t id)
 {
     light_driver_spy self = calloc(1, sizeof(light_driver_spy_t));
 
+    self->base.vtable = &spy_if;
     self->base.id = id;
     self->base.type = "test_driver";
 
@@ -116,9 +117,4 @@ int32_t light_driver_spy_get_last_id(void)
 int32_t light_driver_spy_get_last_state(void)
 {
     return last_state;
-}
-
-void light_driver_spy_install_interface(void)
-{
-    light_driver_set_interface(&spy_if);
 }

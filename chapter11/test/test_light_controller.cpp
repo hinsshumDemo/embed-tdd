@@ -25,6 +25,7 @@
 #include "CppUTest/CommandLineTestRunner.h"
 #include "light_controller.h"
 #include "light_driver_spy.h"
+#include "counting_light_driver.h"
 
 /*---------- macro ----------*/
 /*---------- variable prototype ----------*/
@@ -40,7 +41,6 @@ TEST_GROUP(light_controller)
     {
         light_controller_create();
         light_driver_spy_add_spies_to_controller();
-        light_driver_spy_install_interface();
         light_driver_spy_reset();
     }
 
@@ -61,4 +61,16 @@ TEST(light_controller, AddingDriverDestroysPrevious)
     light_driver spy = light_driver_spy_create(1);
     light_controller_add(1, spy);
     light_controller_destroy();
+}
+
+TEST(light_controller, turnOnDifferentDriverTypes)
+{
+    light_driver other = counting_light_driver_create(5);
+
+    light_controller_add(5, other);
+    light_controller_on(7);
+    light_controller_on(5);
+    light_controller_off(5);
+    LONGS_EQUAL(LIGHT_ON, light_driver_spy_get_state(7));
+    LONGS_EQUAL(2, counting_light_driver_get_call_count(other));
 }

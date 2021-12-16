@@ -1,9 +1,9 @@
 /**
- * @file src/include/light_driver_private.h
+ * @file /home/hinsshum/Desktop/cy/embed_tdd/chapter11/test/mock/include/counting_light_driver.h
  *
  * Copyright (C) 2021
  *
- * light_driver_private.h is free software: you can redistribute it and/or modify
+ * counting_light_driver.h is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -20,8 +20,8 @@
  *
  * @encoding utf-8
  */
-#ifndef __LIGHT_DRIVER_PRIVATE_H
-#define __LIGHT_DRIVER_PRIVATE_H
+#ifndef __COUNTING_LIGHT_DRIVER_H
+#define __COUNTING_LIGHT_DRIVER_H
 
 #ifdef __cplusplus
 extern "C"
@@ -32,30 +32,16 @@ extern "C"
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
-#include "light_driver.h"
+#include "light_driver_private.h"
 
 /*---------- macro ----------*/
 /*---------- type define ----------*/
-typedef struct st_light_driver {
-    light_driver_interface vtable;
-    char *type;
-    int32_t id;
-} light_driver_t;
-
-typedef light_driver_t * light_driver;
-
-typedef struct st_light_driver_interface {
-    void (*turn_on)(light_driver base);
-    void (*turn_off)(light_driver base);
-    void (*destroy)(light_driver base);
-} light_driver_interface_t;
-
-typedef light_driver_interface_t * light_driver_interface;
-
 /*---------- variable prototype ----------*/
 /*---------- function prototype ----------*/
+extern light_driver counting_light_driver_create(int32_t id);
+extern int32_t counting_light_driver_get_call_count(light_driver base);
 
 #ifdef __cplusplus
 }
 #endif
-#endif /* __LIGHT_DRIVER_PRIVATE_H */
+#endif /* __COUNTING_LIGHT_DRIVER_H */
